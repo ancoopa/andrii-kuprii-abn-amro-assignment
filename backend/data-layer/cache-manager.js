@@ -1,8 +1,16 @@
 import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url';
 import fetch from 'node-fetch';
 
-class CacheManager {
-  #DB_FILE_PATH = './dont-remove-me-cached-shows.json'
+/**
+ * If we use `"type": "module"`, __dirname doesn't exist
+ */
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+
+export class CacheManager {
+  #DB_FILE_PATH = path.resolve(__dirname, './dont-remove-me-cached-shows.json')
   #SHOWS_API_URL = 'https://api.tvmaze.com/shows'
   #PAGE_SIZE = 20
   #showsCache = {
@@ -22,19 +30,6 @@ class CacheManager {
       return this.#cacheAllShows()
     }
     this.#showsCache = previouslySavedData
-  }
-
-  #readDB() {
-    const data = fs.readFileSync(this.#DB_FILE_PATH)
-    return JSON.parse(data)
-  }
-
-  #writeDB() {
-    fs.writeFileSync(this.#DB_FILE_PATH, JSON.stringify(this.#showsCache))
-  }
-
-  resetDB() {
-    fs.writeFileSync(this.#DB_FILE_PATH, JSON.stringify({}))
   }
 
   /**
@@ -63,6 +58,19 @@ class CacheManager {
     return result;
   }
 
+  #readDB() {
+    const data = fs.readFileSync(this.#DB_FILE_PATH)
+    return JSON.parse(data)
+  }
+
+  #writeDB() {
+    fs.writeFileSync(this.#DB_FILE_PATH, JSON.stringify(this.#showsCache))
+  }
+
+  resetDB() {
+    fs.writeFileSync(this.#DB_FILE_PATH, JSON.stringify({}))
+  }
+
   async #cacheAllShows(pageNumber = 0) {
     console.log('Caching... Please wait until all shows will be cached.')
     const showsOnPage = await this.#fetchShowsByPage(pageNumber)
@@ -88,7 +96,7 @@ class CacheManager {
 
   #saveShowsByGenre(shows) {
     for (let show of shows) {
-      const { genres } = show
+      const genres = show.genres.map(x => x.toLowerCase())
 
       /**
        * Sometimes genre field is an empty array,
@@ -128,19 +136,3 @@ class CacheManager {
     }
   }
 }
-
-const cacheManager = new CacheManager()
-// cacheManager.resetDB()
-
-// const shows = cacheManager.getShows({ page: 2 })
-// const genres = Object.keys(shows)
-// for (let g of genres) {
-//   console.log(`${g}: ${shows[g].length}`)
-//   console.log(shows[g].map(x => x.rating))
-// }
-
-// const shows2 = cacheManager.getShows({ genres: ['Legal', 'War'], page: 9 })
-// const genres2 = Object.keys(shows2)
-// for (let g of genres2) {
-//   console.log(`${g}: ${shows2[g].length}`)
-// }
