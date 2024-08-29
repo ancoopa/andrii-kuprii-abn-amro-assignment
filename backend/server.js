@@ -4,8 +4,10 @@ import { CacheManager } from './data-layer/cache-manager.js'
 const app = express()
 const port = 3000
 
-// Caching TV shows before server start:
+
 const cacheManager = new CacheManager()
+// Caching TV shows before server start:
+await cacheManager.setup()
 
 app.get('/', (req, res) => {
   res.send('Please, don\'t take this server seriously. \n This is just a proof of concept.')
@@ -24,5 +26,5 @@ app.get('/shows', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`The server is listening on port ${port}`)
 })

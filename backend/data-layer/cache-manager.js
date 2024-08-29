@@ -17,8 +17,8 @@ export class CacheManager {
     unknownGenre: []
   }
 
-  constructor() {
-    console.log('Checking DataBase. Please Stand By...')
+  setup() {
+    console.log('Checking Database. Please Stand By...')
     /**
      * The #DB_FILE_PATH file is required to save time on the server rerun.
      * When you start the server if the file isn't empty, then the server
