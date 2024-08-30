@@ -1,9 +1,11 @@
 import express from 'express'
+import cors from 'cors'
 import { CacheManager } from './data-layer/cache-manager.js'
 
 const app = express()
 const port = 3000
 
+app.use(cors())
 
 const cacheManager = new CacheManager()
 // Caching TV shows before server start:
@@ -26,5 +28,5 @@ app.get('/shows', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`The server is listening on port ${port}`)
+  console.log(`The server is listening on http://localhost:${port}`)
 })
