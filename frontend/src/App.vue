@@ -4,19 +4,40 @@ import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 import { fetchPaginateTvShows } from './networking';
 import { type TvShow } from './shared-types'
-import { tvShowsKey } from './keys';
+import { tvShowsKey, fetchNewPageKey } from './keys';
 
 export interface TvShowsState {
   [genre: string]: {
     shows: TvShow[],
     currentPage: number,
+    hasMorePages: boolean,
   }
 }
 
 const parsedTvShows = ref<TvShowsState>({})
 provide(tvShowsKey, parsedTvShows)
+provide(fetchNewPageKey, fetchSetNewPage)
 
-async function fetchSetTvShows() {
+async function fetchSetNewPage(genre: string): Promise<boolean> {  
+  const genreState = parsedTvShows.value[genre]
+  if (genreState.hasMorePages) {
+    try {
+      const newShowsPages = await fetchPaginateTvShows({
+        page: genreState.currentPage + 1,
+        genres: [genre],
+      })
+      const newPage = newShowsPages[genre]
+      genreState.shows.push(...newPage.shows)
+      genreState.currentPage = newPage.currentPage
+      genreState.hasMorePages = newPage.hasMorePages
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  return genreState.hasMorePages
+}
+
+async function fetchSetFrashPageTvShows() {
   try {
     const shows = await fetchPaginateTvShows()
     parsedTvShows.value = shows
@@ -26,7 +47,7 @@ async function fetchSetTvShows() {
 }
 
 onMounted(async () => {
-  await fetchSetTvShows()
+  await fetchSetFrashPageTvShows()
 })
 </script>
 

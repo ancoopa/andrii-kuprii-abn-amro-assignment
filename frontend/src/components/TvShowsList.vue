@@ -1,13 +1,30 @@
 <script setup lang="ts">
+import { inject, ref, watch } from 'vue'
 import { type TvShow } from '../shared-types'
+import { fetchNewPageKey } from '@/keys'
 
 const props = defineProps<{
   tvShows: TvShow[];
+  genre: string;
 }>()
+
+const fetchSetNewPage: (genre: string) => boolean = inject(fetchNewPageKey, () => true);
+const isLoading = ref<boolean>(false)
+const hasMorePages = ref<boolean>(true)
+
+async function loadMoreTvShows() {
+  isLoading.value = true
+  hasMorePages.value = await fetchSetNewPage(props.genre)
+}
+
+watch(props.tvShows, () => {
+  isLoading.value = false
+})
 </script>
 
 <template>
-  <ul role="list" class="media-scroller" v-if="props.tvShows"> 
+  <h1 class="list-title">{{ genre }}</h1>
+  <ul v-if="props.tvShows" role="list" class="media-scroller"> 
     <li role="listitem" class="media-element" v-for="show in props.tvShows" :key="show.id">
       
       <img class="image" v-if="show?.image?.medium" :src="show.image.medium" :alt="show.name" />
@@ -17,13 +34,25 @@ const props = defineProps<{
       <span v-if="show.rating.average" class="rating">{{ `★${show.rating.average}` }}</span>
       <RouterLink :to="'/show/' + show.id"><button class="button">Details</button></RouterLink>
     </li>
-  </ul>
-  <ul v-else="props.tvShows">
-    Loading...
+
+    <li v-if="hasMorePages" role="listitem" class="media-element">
+      <div v-if="isLoading" class="loader"><span>L↻ading...</span></div>
+      <button v-else class="button button--load-more" @click="loadMoreTvShows">
+        ⇨<br/>Load More
+      </button>
+    </li>
+
   </ul>
 </template>
 
 <style scoped>
+.list-title {
+  padding: calc(var(--spacer) * 1.5) calc(var(--spacer) * 1.25);
+  /* text-align: center; */
+  background-color: var(--color-underlayer-transparent);
+  box-shadow: var(--box-shadow);
+}
+
 .media-scroller {
   display: grid;
   grid-auto-flow: column;
@@ -85,6 +114,46 @@ const props = defineProps<{
   border-bottom-right-radius: var(--border-radius);
   border: none;
   cursor: pointer;
+}
+
+.button--load-more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  background-color: var(--color-underlayer);
+  color: var(--color-accent);
+  /* text-decoration: underline; */
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  color: var(--color-accent);
+  background-color: var(--color-underlayer);
+}
+.loader > span {
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  transform: scale(0.5);
+  animation: loader-animate 1s ease infinite alternate;
+  font-size: 1rem;
+}
+@keyframes loader-animate {
+    0% {
+        transform: scale(.75);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 @media (min-width: 512px) {

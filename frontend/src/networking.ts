@@ -7,7 +7,6 @@ export interface FetchTvShowsParams {
 }
 
 export async function fetchPaginateTvShows(params: FetchTvShowsParams = {}): Promise<TvShowsState> {
-  console.log('Fetch triggered!')
   const genres = params.genres || ''
   const page = params.page || 0
   const response = await fetch(`${SHOWS_CACHE_API_URL}/shows?genres=${genres}&page=${page}`)
@@ -19,6 +18,7 @@ export async function fetchPaginateTvShows(params: FetchTvShowsParams = {}): Pro
     result[genre] = {
       currentPage: page,
       shows: shows[genre],
+      hasMorePages: shows[genre].length > 0,
     }
   }
   return result
