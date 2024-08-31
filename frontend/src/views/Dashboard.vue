@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { inject, onMounted, ref, watch } from 'vue'
-import TvShowsList from '../components/TvShowsList.vue'
+import TvShowsList from '@/components/TvShowsList.vue'
 import type { TvShowsState } from '@/App.vue';
-import { tvShowsKey } from '@/keys'
+import { tvShowsKey } from '@/constants/provide-inject.keys'
 
 const parsedTvShows: TvShowsState = inject(tvShowsKey, {})
 const genres = ref<string[]>([])

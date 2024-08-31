@@ -1,5 +1,5 @@
-import { type TvShowsState } from './App.vue'
-const SHOWS_CACHE_API_URL = 'http://localhost:3000'
+import { type TvShowsState } from '@/App.vue'
+import { CACHE_API_URL, CACHE_API_SHOWS_ENDPOINT } from '@/constants/config'
 
 export interface FetchTvShowsParams {
   genres?: string[];
@@ -9,7 +9,7 @@ export interface FetchTvShowsParams {
 export async function fetchPaginateTvShows(params: FetchTvShowsParams = {}): Promise<TvShowsState> {
   const genres = params.genres || ''
   const page = params.page || 0
-  const response = await fetch(`${SHOWS_CACHE_API_URL}/shows?genres=${genres}&page=${page}`)
+  const response = await fetch(`${CACHE_API_URL}${CACHE_API_SHOWS_ENDPOINT}?genres=${genres}&page=${page}`)
   const shows = await response.json()
   
   // Populate with pagination data

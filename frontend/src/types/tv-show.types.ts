@@ -1,7 +1,3 @@
-export interface ParsedTvShows {
-  [genre: string]: TvShow[]
-}
-
 export interface TvShow {
   id: number;
   url: string;

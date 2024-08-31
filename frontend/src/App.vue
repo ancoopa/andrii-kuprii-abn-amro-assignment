@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, provide } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import { fetchPaginateTvShows } from './networking';
-import { type TvShow } from './shared-types'
-import { tvShowsKey, fetchNewPageKey } from './keys';
+import { fetchPaginateTvShows } from '@/services/networking.service';
+import { type TvShow } from '@/types/tv-show.types'
+import { tvShowsKey, fetchNewPageKey } from '@/constants/provide-inject.keys';
+import Loader from '@/components/Loader.vue'
 
 export interface TvShowsState {
   [genre: string]: {
@@ -15,6 +15,7 @@ export interface TvShowsState {
 }
 
 const parsedTvShows = ref<TvShowsState>({})
+const isLoading = ref<boolean>(false)
 provide(tvShowsKey, parsedTvShows)
 provide(fetchNewPageKey, fetchSetNewPage)
 
@@ -38,12 +39,14 @@ async function fetchSetNewPage(genre: string): Promise<boolean> {
 }
 
 async function fetchSetFrashPageTvShows() {
+  isLoading.value = true
   try {
     const shows = await fetchPaginateTvShows()
     parsedTvShows.value = shows
   } catch (err) {
     console.log(err)
   }
+  isLoading.value = false
 }
 
 onMounted(async () => {
@@ -60,7 +63,8 @@ onMounted(async () => {
     </div>
   </header>
 
-  <router-view v-slot="{ Component: RouterView }">
+  <Loader v-if="isLoading" />
+  <router-view v-esle v-slot="{ Component: RouterView }">
     <keep-alive>
       <component :is="RouterView" />
     </keep-alive>
