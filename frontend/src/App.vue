@@ -1,38 +1,55 @@
 <script setup lang="ts">
+import { ref, onMounted, provide } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { fetchPaginateTvShows } from './networking';
+import { type TvShow } from './shared-types'
+import { tvShowsKey } from './keys';
 
-const response = await fetch('http://localhost:3000/shows?genres=diy')
-const shows = await response.json()
-console.log('shows: ', shows)
+export interface TvShowsState {
+  [genre: string]: {
+    shows: TvShow[],
+    currentPage: number,
+  }
+}
+
+const parsedTvShows = ref<TvShowsState>({})
+provide(tvShowsKey, parsedTvShows)
+
+async function fetchSetTvShows() {
+  try {
+    const shows = await fetchPaginateTvShows()
+    parsedTvShows.value = shows
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+onMounted(async () => {
+  await fetchSetTvShows()
+})
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/">Dashboard</RouterLink>
       </nav>
     </div>
   </header>
 
-  <RouterView />
+  <router-view v-slot="{ Component: RouterView }">
+    <keep-alive>
+      <component :is="RouterView" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
 }
 
 nav {

@@ -1,3 +1,3 @@
 # andrii-kuprii-abn-amro-assignment
-# About
-This is an assignment for the ABN Amro
+# Requirements
+Node version: v20.11.0
