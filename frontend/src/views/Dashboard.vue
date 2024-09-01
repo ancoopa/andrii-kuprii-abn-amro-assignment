@@ -1,33 +1,67 @@
 <script setup lang="ts">
-import { inject, onMounted, ref, watch } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import TvShowsList from '@/components/TvShowsList.vue'
-import type { TvShowsState } from '@/App.vue';
-import { tvShowsKey } from '@/constants/provide-inject.keys'
+import { fetchNewPageKey } from '@/constants/provide-inject.keys'
+import type { TvShow } from '@/types/tv-show.types';
+import { fetchPaginateTvShows } from '@/services/networking.service';
+import Loader from '@/components/Loader.vue'
 
-const parsedTvShows: TvShowsState = inject(tvShowsKey, {})
-const genres = ref<string[]>([])
-
-/**
- * TODO: I'm not too fond of the following part with the same thing
- * happening on onMounted() and watch(). There is probably a nicer
- * solution that I'm going to explore later.
- */
-function setGenres() {
-  genres.value = Object.keys(parsedTvShows.value).sort()
+export interface TvShowsState {
+  [genre: string]: {
+    shows: TvShow[],
+    currentPage: number,
+    hasMorePages: boolean,
+  }
 }
-onMounted(() => {
-  setGenres()
-})
-watch(parsedTvShows, () => {
-  setGenres()
+
+const tvShows = ref<TvShowsState>({})
+const genres = ref<string[]>([])
+const isLoading = ref<boolean>(false)
+
+provide(fetchNewPageKey, fetchSetNewPage)
+
+async function fetchSetNewPage(genre: string): Promise<boolean> {  
+  const genreState = tvShows.value[genre]
+  if (genreState.hasMorePages) {
+    try {
+      const response = await fetchPaginateTvShows({
+        page: genreState.currentPage + 1,
+        genres: [genre],
+      })
+      const newPageData = response[genre]
+      genreState.shows.push(...newPageData.shows)
+      genreState.currentPage = newPageData.currentPage
+      genreState.hasMorePages = newPageData.hasMorePages
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  return genreState.hasMorePages
+}
+
+async function fetchSetInitialData() {
+  isLoading.value = true
+  try {
+    const shows = await fetchPaginateTvShows()
+    tvShows.value = shows
+    genres.value = Object.keys(tvShows.value).sort()
+  } catch (err) {
+    console.log(err)
+  }
+  isLoading.value = false
+}
+
+onMounted(async () => {
+  await fetchSetInitialData()
 })
 </script>
 
 <template>
-  <main>
+  <Loader v-if="isLoading" />
+  <main v-else>
     <section class="section" v-if="genres.length > 0" v-for="genre in genres" :key="genre">
-      <TvShowsList v-if="parsedTvShows[genre]"
-        :tvShows="parsedTvShows[genre].shows"
+      <TvShowsList v-if="tvShows[genre]"
+        :tvShows="tvShows[genre].shows"
         :genre="genre"/>
     </section>
   </main>
