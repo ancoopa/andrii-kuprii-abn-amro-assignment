@@ -29,7 +29,6 @@ async function fetchSetTvShow() {
 
 onMounted(async () => {
   await fetchSetTvShow()
-  console.log(tvShow.value)
 })
 
 </script>
@@ -37,8 +36,18 @@ onMounted(async () => {
 <template>
   <Loader v-if="isLoading" />
   <article v-else-if="tvShow" class="tv-show">
-    <img class="tv-show-image" v-if="tvShow.image?.original" :src="tvShow.image?.original" :alt="tvShow.name" />
-    <img class="tv-show-image" v-else src="@/assets/movie-placeholder.webp" :alt="tvShow.name" />
+    <img
+      v-if="tvShow.image?.original"
+      class="tv-show-image"
+      :src="tvShow.image?.original"
+      :alt="tvShow.name"
+    />
+    <img
+      v-else
+      class="tv-show-image"
+      src="@/assets/movie-placeholder.webp"
+      :alt="tvShow.name"
+    />
 
     <div class="tv-show-info">
       <h1 class="title">{{ tvShow.name }}</h1>
@@ -56,7 +65,7 @@ onMounted(async () => {
         <div>Status: {{ tvShow.status }}</div>
         <div class="summary">{{ stripHtml(tvShow.summary) }}</div>
       </div>
-      <a :href="tvShow.officialSite">
+      <a v-if="tvShow.officialSite" :href="tvShow.officialSite">
         <button class="button button-secondary">Official Site</button>
       </a>
       <a :href="tvShow.url">
@@ -71,14 +80,13 @@ onMounted(async () => {
 <style scoped>
 .tv-show {
   display: block;
-  z-index: -2;
   position: relative;
   min-height: 100vh;
   background-color: var(--color-underlayer);
   border-radius: var(--border-radius);
   overflow: hidden;
+  z-index: 1;
 }
-
 .tv-show-image {
   object-fit: cover;
   position: absolute;
@@ -89,12 +97,12 @@ onMounted(async () => {
   height: 100%;
   border-radius: var(--border-radius);
 }
-
 .tv-show-info {
   background-color: var(--color-underlayer-transparent);
   width: 100%;
   min-height: 100vh;
   padding: var(--spacer) calc(var(--spacer) * 2);
+  z-index: 3;
 }
 
 @media (min-width: 678px) {
@@ -105,11 +113,9 @@ onMounted(async () => {
     min-height: auto;
     margin: 2.5vw auto;
   }
-
   .tv-show-info {
     min-height: auto;
   }
-
   .tv-show-image {
     position: inherit;
     height: auto;
@@ -123,6 +129,7 @@ onMounted(async () => {
 .stats .title {
   color: var(--color-accent);
 }
+
 .stats .genres {
   display: inline;
   color: var(--color-neutral);

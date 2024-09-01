@@ -24,22 +24,45 @@ watch(props.tvShows, () => {
 </script>
 
 <template>
-  <h1 class="list-title">{{ genre }}</h1>
+  <h1 class="list-title">{{ genre }} <i>→</i></h1>
   <ul v-if="props.tvShows" role="list" class="media-scroller"> 
-    <li role="listitem" class="media-element" v-for="show in props.tvShows" :key="show.id">
+    <li
+      v-for="show in props.tvShows"
+      :key="show.id"
+      class="media-element"
+      role="listitem"
+    >
       
-      <img class="image" v-if="show?.image?.medium" :src="show.image.medium" :alt="show.name" />
-      <img class="image" v-else src="@/assets/movie-placeholder.webp" :alt="show.name" />
+      <img
+        v-if="show?.image?.medium"
+        class="image"
+        :src="show.image.medium"
+        :alt="show.name"
+      />  
+      <img
+        v-else
+        class="image"
+        src="@/assets/movie-placeholder.webp"
+        :alt="show.name"
+      />
       
       <h2 class="title">{{ show.name }}</h2>
-      <span v-if="show.rating.average" class="rating">{{ `★${show.rating.average}` }}</span>
-      <RouterLink :to="'/show/' + show.id"><button class="button">Details</button></RouterLink>
+      <span v-if="show.rating.average" class="rating">
+        {{ `★${show.rating.average}` }}
+      </span>
+      <RouterLink :to="'/show/' + show.id">
+        <button class="button">Details</button>
+      </RouterLink>
     </li>
 
     <li v-if="hasMorePages" role="listitem" class="media-element">
       <Loader v-if="isLoading" />
-      <button v-else class="button button--load-more" @click="loadMoreTvShows">
-        ⇨<br/>Load More
+      <button
+        v-else
+        class="button button--load-more"
+        @click="loadMoreTvShows"
+      >
+        →<br/>Load More
       </button>
     </li>
 
@@ -49,7 +72,6 @@ watch(props.tvShows, () => {
 <style scoped>
 .list-title {
   padding: calc(var(--spacer) * 1.5) calc(var(--spacer) * 1.25);
-  /* text-align: center; */
   background-color: var(--color-underlayer-transparent);
   box-shadow: var(--box-shadow);
 }
@@ -84,6 +106,7 @@ watch(props.tvShows, () => {
 }
 
 .title {
+  text-align: center;
   position: absolute;
   left: 0;
   top: 0;

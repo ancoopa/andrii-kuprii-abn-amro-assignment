@@ -59,16 +59,22 @@ onMounted(async () => {
 <template>
   <Loader v-if="isLoading" />
   <main v-else>
-    <section class="section" v-if="genres.length > 0" v-for="genre in genres" :key="genre">
-      <TvShowsList v-if="tvShows[genre]"
+    <section
+      v-if="genres.length > 0"
+      v-for="genre in genres"
+      :key="genre"
+    >
+      <TvShowsList
+        v-if="tvShows[genre]"
         :tvShows="tvShows[genre].shows"
-        :genre="genre"/>
+        :genre="genre"
+      />
     </section>
   </main>
 </template>
 
 <style scoped>
-.section {
+section {
   padding-bottom: 2.25rem;
 }
 </style>

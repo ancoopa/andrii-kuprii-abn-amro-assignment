@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import Search from '@/components/Search.vue'
 </script>
 
 <template>
   <header>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Dashboard</RouterLink>
-      </nav>
-    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><RouterLink to="/">Dashboard</RouterLink></li>
+      </ul>
+      <Search />
+    </nav>
   </header>
 
   <!-- TODO: Probably there is a nicer way to keep alive routes -->
@@ -20,55 +22,48 @@ import { RouterLink, RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
 nav {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+  align-items: center;
   width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+  height: 100%;
+  padding: var(--spacer);
+  background-color: var(--color-underlayer);
+  border-bottom: 1px solid var(--color-background);
 }
-
 nav a.router-link-exact-active {
   color: var(--color-text);
 }
-
 nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
-
 nav a {
   display: inline-block;
-  padding: 0 1rem;
+  padding: 1.5rem 1rem 1rem;
   border-left: 1px solid var(--color-unredlayer);
 }
-
 nav a:first-of-type {
   border: 0;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-  }
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
+@media (min-width: 512px) {
   nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    padding: .75rem 0;
+  }
+  nav a {
+    display: inline-block;
+    padding: 0 1rem;
+    border-left: 1px solid var(--color-unredlayer);
+  }
+  .search input {
+    padding: var(--spacer);
   }
 }
 </style>
