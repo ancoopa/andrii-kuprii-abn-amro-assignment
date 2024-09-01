@@ -5,6 +5,7 @@ import {
   CACHE_API_SHOWS_ENDPOINT,
   TVMAZE_API_URL,
   TVMAZE_API_SHOWS_ENDPOINT,
+  TVMAZE_API_SEARCH_ENDPOINT,
 } from '@/constants/config'
 
 export interface FetchTvShowsParams {
@@ -37,4 +38,9 @@ export async function fetchTvShow(id: number): Promise<TvShow | null> {
     return null
   }
   return data
+}
+
+export async function searchTvShows(q: string): Promise<{ score: number, show: TvShow}[]> {
+  const response = await fetch(`${TVMAZE_API_URL}${TVMAZE_API_SEARCH_ENDPOINT}?q=${q}`)
+  return await response.json()
 }

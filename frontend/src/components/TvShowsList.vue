@@ -32,13 +32,12 @@ watch(props.tvShows, () => {
       class="media-element"
       role="listitem"
     >
-      
       <img
         v-if="show?.image?.medium"
         class="image"
         :src="show.image.medium"
         :alt="show.name"
-      />  
+      />
       <img
         v-else
         class="image"

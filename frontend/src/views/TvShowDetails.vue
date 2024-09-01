@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router'
 import { type TvShow } from '@/types/tv-show.types'
 import { fetchTvShow } from '@/services/networking.service';
@@ -28,6 +28,9 @@ async function fetchSetTvShow() {
 }
 
 onMounted(async () => {
+  await fetchSetTvShow()
+})
+watch(() => route.params.id, async () => {
   await fetchSetTvShow()
 })
 
