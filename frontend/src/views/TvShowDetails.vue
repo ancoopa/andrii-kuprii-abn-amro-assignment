@@ -4,18 +4,18 @@ import { useRoute } from 'vue-router'
 import { type TvShow } from '@/types/tv-show.types'
 import { fetchTvShow } from '@/services/networking.service'
 import LoadingIndicator from '@/components/LoadingIndicator.vue'
+import { stripHtml } from '@/utils/strip-html'
 
 const tvShow = ref<TvShow | null>(null)
 const isLoading = ref<boolean>(false)
 const route = useRoute()
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]*>?/gm, '')
-}
-
 async function fetchSetTvShow() {
-  isLoading.value = true
   const id = parseInt(route.params.id as string)
+  if (isNaN(id)) {
+    return null
+  }
+  isLoading.value = true
   try {
     const show = await fetchTvShow(id)
     if (show !== null) {

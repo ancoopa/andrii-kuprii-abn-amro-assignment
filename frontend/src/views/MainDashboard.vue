@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, provide, ref } from 'vue'
-import TvShowsList from '@/components/TvShowsList.vue'
+import TvShowList from '@/components/TvShowList.vue'
 import { fetchNewPageKey } from '@/constants/provide-inject.keys'
 import type { TvShow } from '@/types/tv-show.types'
 import { fetchPaginateTvShows } from '@/services/networking.service'
@@ -60,7 +60,7 @@ onMounted(async () => {
   <LoadingIndicator v-if="isLoading" />
   <main v-else>
     <section v-for="genre in genres" :key="genre">
-      <TvShowsList v-if="tvShows[genre]" :tvShows="tvShows[genre].shows" :genre="genre" />
+      <TvShowList v-if="tvShows[genre]" :tvShows="tvShows[genre].shows" :genre="genre" />
     </section>
   </main>
 </template>

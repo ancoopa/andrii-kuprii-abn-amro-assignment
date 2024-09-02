@@ -30,7 +30,6 @@ watch(
       const response = await searchTvShows(q.value)
       searchResults.value = response.map((x) => x.show)
       isLoading.value = false
-      console.log('searchResults.value: ', searchResults.value[0])
     } catch (err) {
       console.log(err)
     }

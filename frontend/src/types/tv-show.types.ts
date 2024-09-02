@@ -37,8 +37,8 @@ export interface TvShow {
     imdb: string
   }
   image: {
-    medium: string
-    original: string
+    medium?: string
+    original?: string
   }
   summary: string
   updated: number

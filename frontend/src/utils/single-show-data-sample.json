@@ -1,0 +1,54 @@
+{
+  "id": 79000,
+  "url": "https://www.tvmaze.com/shows/79000/art-of-the-heist",
+  "name": "Art of the Heist",
+  "type": "Documentary",
+  "language": "English",
+  "genres": ["History"],
+  "status": "Ended",
+  "runtime": 60,
+  "averageRuntime": 60,
+  "premiered": "2006-03-03",
+  "ended": "2007-05-25",
+  "officialSite": "https://api.tvmaze.com/shows/79000",
+  "schedule": {
+    "time": "",
+    "days": ["Friday"]
+  },
+  "rating": {
+    "average": 8
+  },
+  "weight": 53,
+  "network": {
+    "id": 208,
+    "name": "Ovation",
+    "country": {
+      "name": "United States",
+      "code": "US",
+      "timezone": "America/New_York"
+    },
+    "officialSite": null
+  },
+  "webChannel": null,
+  "dvdCountry": null,
+  "externals": {
+    "tvrage": null,
+    "thetvdb": 84966,
+    "imdb": "tt5705416"
+  },
+  "image": {
+    "medium": "https://static.tvmaze.com/uploads/images/medium_portrait/531/1328941.jpg",
+    "original": "https://static.tvmaze.com/uploads/images/original_untouched/531/1328941.jpg"
+  },
+  "summary": "\u003Cp\u003EThey turned crime into an art form. Meet the crooks who plundered artistic treasures, sending shock waves through the art scene and setting off frantic dragnets across the globe. This thrilling documentary unlocks gallery doors to chronicle history's most notorious art thefts—from nabbing the Mona Lisa out of the Louvre in broad daylight to the still-unsolved blockbuster heist at Boston's Isabella Stewart Gardner Museum. Vivid reenactments show how cunning break-ins, scams, and forgeries netted millions of dollars and became front-page news. Follow the trail of stolen art as it passes through the hands of unscrupulous dealers and shadowy smugglers, then often into obscurity. In candid interviews, the thieves who stole the art and the investigators who chased them share insights into crimes committed in galleries, tombs, and mansions from Egypt to Sweden. Some of the colorful characters suspected in the thefts include mobster Whitey Bulger, Nazi Hermann Göring, and even painter Pablo Picasso.\u003C/p\u003E",
+  "updated": 1723816871,
+  "_links": {
+    "self": {
+      "href": "https://api.tvmaze.com/shows/79000"
+    },
+    "previousepisode": {
+      "href": "https://api.tvmaze.com/episodes/2980627",
+      "name": "The Thieving Don Juan"
+    }
+  }
+}

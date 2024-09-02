@@ -24,7 +24,7 @@ watch(props.tvShows, () => {
 </script>
 
 <template>
-  <h1 class="list-title">{{ genre }} <i>→</i></h1>
+  <h1 v-if="genre" class="list-title">{{ genre }} <i>→</i></h1>
   <ul v-if="props.tvShows" role="list" class="media-scroller">
     <li v-for="show in props.tvShows" :key="show.id" class="media-element" role="listitem">
       <img v-if="show?.image?.medium" class="image" :src="show.image.medium" :alt="show.name" />
@@ -35,15 +35,13 @@ watch(props.tvShows, () => {
         {{ `★${show.rating.average}` }}
       </span>
       <RouterLink :to="'/show/' + show.id">
-        <button class="button">Details</button>
+        <button>Details</button>
       </RouterLink>
     </li>
 
     <li v-if="hasMorePages" role="listitem" class="media-element">
       <LoadingIndicator v-if="isLoading" />
-      <button v-else class="button button--load-more" @click="loadMoreTvShows">
-        →<br />Load More
-      </button>
+      <button v-else class="button--load-more" @click="loadMoreTvShows">→<br />Load More</button>
     </li>
   </ul>
 </template>
@@ -106,7 +104,7 @@ watch(props.tvShows, () => {
   border-bottom-left-radius: var(--border-radius);
 }
 
-.button {
+button {
   padding: calc(var(--spacer) * 2);
   margin: 0;
   width: 100%;
