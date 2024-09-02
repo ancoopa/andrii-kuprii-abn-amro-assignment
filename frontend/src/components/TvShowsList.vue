@@ -2,14 +2,14 @@
 import { inject, ref, watch } from 'vue'
 import { type TvShow } from '@/types/tv-show.types'
 import { fetchNewPageKey } from '@/constants/provide-inject.keys'
-import Loader from '@/components/Loader.vue'
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 const props = defineProps<{
-  tvShows: TvShow[];
-  genre: string;
+  tvShows: TvShow[]
+  genre: string
 }>()
 
-const fetchSetNewPage: (genre: string) => boolean = inject(fetchNewPageKey, () => true);
+const fetchSetNewPage: (genre: string) => boolean = inject(fetchNewPageKey, () => true)
 const isLoading = ref<boolean>(false)
 const hasMorePages = ref<boolean>(true)
 
@@ -25,26 +25,11 @@ watch(props.tvShows, () => {
 
 <template>
   <h1 class="list-title">{{ genre }} <i>→</i></h1>
-  <ul v-if="props.tvShows" role="list" class="media-scroller"> 
-    <li
-      v-for="show in props.tvShows"
-      :key="show.id"
-      class="media-element"
-      role="listitem"
-    >
-      <img
-        v-if="show?.image?.medium"
-        class="image"
-        :src="show.image.medium"
-        :alt="show.name"
-      />
-      <img
-        v-else
-        class="image"
-        src="@/assets/movie-placeholder.webp"
-        :alt="show.name"
-      />
-      
+  <ul v-if="props.tvShows" role="list" class="media-scroller">
+    <li v-for="show in props.tvShows" :key="show.id" class="media-element" role="listitem">
+      <img v-if="show?.image?.medium" class="image" :src="show.image.medium" :alt="show.name" />
+      <img v-else class="image" src="@/assets/movie-placeholder.webp" :alt="show.name" />
+
       <h2 class="title">{{ show.name }}</h2>
       <span v-if="show.rating.average" class="rating">
         {{ `★${show.rating.average}` }}
@@ -55,16 +40,11 @@ watch(props.tvShows, () => {
     </li>
 
     <li v-if="hasMorePages" role="listitem" class="media-element">
-      <Loader v-if="isLoading" />
-      <button
-        v-else
-        class="button button--load-more"
-        @click="loadMoreTvShows"
-      >
-        →<br/>Load More
+      <LoadingIndicator v-if="isLoading" />
+      <button v-else class="button button--load-more" @click="loadMoreTvShows">
+        →<br />Load More
       </button>
     </li>
-
   </ul>
 </template>
 
@@ -94,7 +74,7 @@ watch(props.tvShows, () => {
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   position: relative;
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
   box-shadow: var(--box-shadow);
 }
 
@@ -159,7 +139,7 @@ watch(props.tvShows, () => {
     font-size: 1rem;
   }
   .rating {
-    font-size: .75rem;
+    font-size: 0.75rem;
   }
 }
 

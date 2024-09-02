@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { type TvShow } from '@/types/tv-show.types'
-import { fetchTvShow } from '@/services/networking.service';
-import Loader from '@/components/Loader.vue'
+import { fetchTvShow } from '@/services/networking.service'
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 const tvShow = ref<TvShow | null>(null)
 const isLoading = ref<boolean>(false)
 const route = useRoute()
 
 function stripHtml(html: string): string {
-   return html.replace(/<[^>]*>?/gm, '');
+  return html.replace(/<[^>]*>?/gm, '')
 }
 
 async function fetchSetTvShow() {
@@ -30,14 +30,16 @@ async function fetchSetTvShow() {
 onMounted(async () => {
   await fetchSetTvShow()
 })
-watch(() => route.params.id, async () => {
-  await fetchSetTvShow()
-})
-
+watch(
+  () => route.params.id,
+  async () => {
+    await fetchSetTvShow()
+  }
+)
 </script>
 
 <template>
-  <Loader v-if="isLoading" />
+  <LoadingIndicator v-if="isLoading" />
   <article v-else-if="tvShow" class="tv-show">
     <img
       v-if="tvShow.image?.original"
@@ -45,18 +47,13 @@ watch(() => route.params.id, async () => {
       :src="tvShow.image?.original"
       :alt="tvShow.name"
     />
-    <img
-      v-else
-      class="tv-show-image"
-      src="@/assets/movie-placeholder.webp"
-      :alt="tvShow.name"
-    />
+    <img v-else class="tv-show-image" src="@/assets/movie-placeholder.webp" :alt="tvShow.name" />
 
     <div class="tv-show-info">
       <h1 class="title">{{ tvShow.name }}</h1>
       <div class="stats">
         <ul class="genres">
-          <li v-for="genre in tvShow.genres">
+          <li v-for="genre in tvShow.genres" :key="genre">
             {{ genre }}
           </li>
         </ul>
@@ -75,7 +72,6 @@ watch(() => route.params.id, async () => {
         <button class="button">On Tvmaze</button>
       </a>
     </div>
-
   </article>
   <div v-else>No show with id {{ route.params.id }}.</div>
 </template>
@@ -126,7 +122,7 @@ watch(() => route.params.id, async () => {
 }
 
 .stats {
-  font-size: .8rem;
+  font-size: 0.8rem;
   padding-top: var(--spacer);
 }
 .stats .title {
@@ -142,10 +138,10 @@ watch(() => route.params.id, async () => {
   display: inline;
 }
 .stats .genres > li::after {
-  content: ", ";
+  content: ', ';
 }
 .stats .genres > li:last-child::after {
-  content: ".";
+  content: '.';
 }
 
 .stats .rating {

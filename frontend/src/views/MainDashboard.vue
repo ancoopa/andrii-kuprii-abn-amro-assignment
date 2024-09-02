@@ -2,15 +2,15 @@
 import { onMounted, provide, ref } from 'vue'
 import TvShowsList from '@/components/TvShowsList.vue'
 import { fetchNewPageKey } from '@/constants/provide-inject.keys'
-import type { TvShow } from '@/types/tv-show.types';
-import { fetchPaginateTvShows } from '@/services/networking.service';
-import Loader from '@/components/Loader.vue'
+import type { TvShow } from '@/types/tv-show.types'
+import { fetchPaginateTvShows } from '@/services/networking.service'
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 export interface TvShowsState {
   [genre: string]: {
-    shows: TvShow[],
-    currentPage: number,
-    hasMorePages: boolean,
+    shows: TvShow[]
+    currentPage: number
+    hasMorePages: boolean
   }
 }
 
@@ -20,13 +20,13 @@ const isLoading = ref<boolean>(false)
 
 provide(fetchNewPageKey, fetchSetNewPage)
 
-async function fetchSetNewPage(genre: string): Promise<boolean> {  
+async function fetchSetNewPage(genre: string): Promise<boolean> {
   const genreState = tvShows.value[genre]
   if (genreState.hasMorePages) {
     try {
       const response = await fetchPaginateTvShows({
         page: genreState.currentPage + 1,
-        genres: [genre],
+        genres: [genre]
       })
       const newPageData = response[genre]
       genreState.shows.push(...newPageData.shows)
@@ -57,18 +57,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <Loader v-if="isLoading" />
+  <LoadingIndicator v-if="isLoading" />
   <main v-else>
-    <section
-      v-if="genres.length > 0"
-      v-for="genre in genres"
-      :key="genre"
-    >
-      <TvShowsList
-        v-if="tvShows[genre]"
-        :tvShows="tvShows[genre].shows"
-        :genre="genre"
-      />
+    <section v-for="genre in genres" :key="genre">
+      <TvShowsList v-if="tvShows[genre]" :tvShows="tvShows[genre].shows" :genre="genre" />
     </section>
   </main>
 </template>

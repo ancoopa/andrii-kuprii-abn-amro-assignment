@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import Search from '@/components/Search.vue'
+import SearchTvShows from '@/components/SearchTvShows.vue'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import Search from '@/components/Search.vue'
       <ul class="nav-links">
         <li><RouterLink to="/">Dashboard</RouterLink></li>
       </ul>
-      <Search />
+      <SearchTvShows />
     </nav>
   </header>
 
@@ -48,14 +48,13 @@ nav a:first-of-type {
   border: 0;
 }
 
-
 @media (min-width: 512px) {
   nav {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    padding: .75rem 0;
+    padding: 0.75rem 0;
   }
   nav a {
     display: inline-block;

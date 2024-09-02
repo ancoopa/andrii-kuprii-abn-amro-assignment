@@ -1,9 +1,9 @@
 <template>
-  <div class="loader"><span>Loading...</span></div>
+  <div class="loading-indicator"><span>Loading...</span></div>
 </template>
 
 <style scoped>
-  .loader {
+.loading-indicator {
   display: flex;
   align-items: center;
   position: absolute;
@@ -14,20 +14,20 @@
   color: var(--color-accent);
   background-color: var(--color-underlayer);
 }
-.loader > span {
+.loading-indicator > span {
   width: 100%;
   text-align: center;
   font-weight: 600;
   transform: scale(0.5);
-  animation: loader-animate 1s ease infinite alternate;
+  animation: loading-indicator-animate 1s ease infinite alternate;
   font-size: 1rem;
 }
-@keyframes loader-animate {
+@keyframes loading-indicator-animate {
   0% {
-      transform: scale(.75);
+    transform: scale(0.75);
   }
   100% {
-      transform: scale(1);
-    }
+    transform: scale(1);
+  }
 }
 </style>
